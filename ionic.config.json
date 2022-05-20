@@ -1,0 +1,8 @@
+{
+  "name": "no-cash",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue",
+  "id": "312e8103"
+}

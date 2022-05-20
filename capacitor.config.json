@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "no-cash",
+	"webDir": "dist",
+	"bundledWebRuntime": false
+}
