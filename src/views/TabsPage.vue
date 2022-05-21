@@ -3,12 +3,13 @@
        <ion-fab class="qr-code-fab" horizontal="end" vertical="bottom" slot="fixed">
       
          <template v-if="authStore.user">
-           <!-- v-if="authStore.user.role === USER_ROLES.BUYER"  -->
-            <ion-fab-button id="trigger-button-qr" @click="createQr" >
+         
+            <ion-fab-button v-if="authStore.user.role === USER_ROLES.BUYER"  id="trigger-button-qr" @click="createQr" >
+              
               <ion-icon :icon="qrCode"></ion-icon>
             </ion-fab-button>
-<!-- v-else-if="authStore.user.role === USER_ROLES.SELLER || authStore.user.role === USER_ROLES.OPERATION_ADMIN" -->
-            <ion-fab-button  id="trigger-button-qr-scan" >
+
+            <ion-fab-button  @click="scanQr" v-else-if="authStore.user.role === USER_ROLES.SELLER || authStore.user.role === USER_ROLES.OPERATION_ADMIN"  id="trigger-button-qr-scan" >
               <ion-icon :icon="qrCode"></ion-icon>
 
             </ion-fab-button>
@@ -60,6 +61,9 @@
     </ion-tabs>
     <!-- Sheet Modal -->
       <ion-modal 
+        @ionModalDidDismiss="isQrShopOpen = false"
+        :isOpen="isQrShopOpen"
+
         trigger="trigger-button-qr"
         :breakpoints="[0.5]"
         :initialBreakpoint="0.5"
@@ -74,6 +78,8 @@
       </ion-modal>
 
        <ion-modal 
+        @ionModalDidDismiss="isQrScanOpen = false"
+       :isOpen="isQrScanOpen"
         trigger="trigger-button-qr-scan"
         :breakpoints="[0.4]"
         :initialBreakpoint="0.4"
@@ -97,7 +103,13 @@ import { modalController } from "@ionic/vue";
 import { useAuthStore } from "@/stores/auth";
 import { USER_ROLES } from "@/const";
 import { toastController } from "@ionic/vue";
-import { defineComponent, ref } from "vue";
+import {
+  defineComponent,
+  ref,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+} from "vue";
 import QrScaner from "@/components/QrScaner.vue";
 import {
   ellipse,
@@ -124,10 +136,15 @@ export default defineComponent({
 
   setup() {
     const authStore = useAuthStore();
+    const isQrShopOpen = ref(false);
+    const isQrScanOpen = ref(false);
 
-    const isModalOpen = ref(false);
+    const scanQr = () => {
+      isQrScanOpen.value = true;
+    };
     const createQr = async () => {
-      console.log("🚀 ~ file: TabsPage.vue ~ line 140 ~ createQr ~ createQr");
+      isQrShopOpen.value = true;
+      // console.log("🚀 ~ file: TabsPage.vue ~ line 140 ~ createQr ~ createQr");
       // const modal = await modalController.create({
       //   component: "qr-scaner",
       //   // cssClass: "my-custom-class",
@@ -152,7 +169,9 @@ export default defineComponent({
         );
       }, 1000);
     };
+
     const onQrFinded = async (code) => {
+      isQrScanOpen.value = false;
       const toast = await toastController.create({
         message: code,
         duration: 1000,
@@ -198,10 +217,12 @@ export default defineComponent({
       qrCode,
       qrCodeOutline,
       qrCodeSharp,
-      isModalOpen,
       createQr,
       authStore,
       USER_ROLES,
+      isQrShopOpen,
+      isQrScanOpen,
+      scanQr,
     };
   },
 });
