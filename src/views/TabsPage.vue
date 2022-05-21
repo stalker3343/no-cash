@@ -3,11 +3,12 @@
        <ion-fab class="qr-code-fab" horizontal="end" vertical="bottom" slot="fixed">
       
          <template v-if="authStore.user">
-            <ion-fab-button @click="createQr" v-if="authStore.user.role === USER_ROLES.BUYER" id="trigger-button-qr">
+           <!-- v-if="authStore.user.role === USER_ROLES.BUYER"  -->
+            <ion-fab-button id="trigger-button-qr" @click="createQr" >
               <ion-icon :icon="qrCode"></ion-icon>
             </ion-fab-button>
-
-            <ion-fab-button v-else-if="authStore.user.role === USER_ROLES.SELLER || authStore.user.role === USER_ROLES.OPERATION_ADMIN" id="trigger-button-qr-scan"  >
+<!-- v-else-if="authStore.user.role === USER_ROLES.SELLER || authStore.user.role === USER_ROLES.OPERATION_ADMIN" -->
+            <ion-fab-button  id="trigger-button-qr-scan" >
               <ion-icon :icon="qrCode"></ion-icon>
 
             </ion-fab-button>
@@ -91,6 +92,8 @@
 </template>
 
 <script lang="ts">
+import { modalController } from "@ionic/vue";
+
 import { useAuthStore } from "@/stores/auth";
 import { USER_ROLES } from "@/const";
 import { toastController } from "@ionic/vue";
@@ -123,8 +126,16 @@ export default defineComponent({
     const authStore = useAuthStore();
 
     const isModalOpen = ref(false);
-    const createQr = () => {
+    const createQr = async () => {
       console.log("🚀 ~ file: TabsPage.vue ~ line 140 ~ createQr ~ createQr");
+      // const modal = await modalController.create({
+      //   component: "qr-scaner",
+      //   // cssClass: "my-custom-class",
+      //   componentProps: {
+      //     title: "New Title",
+      //   },
+      // });
+      // return modal.present();
 
       setTimeout(() => {
         var canvas = document.getElementById("canvas");

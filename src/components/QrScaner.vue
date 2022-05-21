@@ -1,11 +1,11 @@
 <template>
   <div class="wrapper-qr-scaner">
-  <div id="loadingMessage">🎥 Unable to access video stream (please make sure you have a webcam enabled)</div>
-  <canvas id="canvas" hidden></canvas>
-  <div id="output" class="hidden-qr-class">
-    <div id="outputMessage">No QR code detected.</div>
-    <div hidden><b>Data:</b> <span id="outputData"></span></div>
-  </div>
+    <div id="loadingMessage">🎥 Unable to access video stream (please make sure you have a webcam enabled)</div>
+    <canvas id="canvas" hidden></canvas>
+    <div id="output" class="hidden-qr-class">
+      <div id="outputMessage">No QR code detected.</div>
+      <div hidden><b>Data:</b> <span id="outputData"></span></div>
+    </div>
   </div>
 </template>
 
@@ -14,7 +14,9 @@ import { defineComponent, ref } from "vue";
 
 import jsQR from "jsqr";
 export default defineComponent({
+  name: "QrScaner",
   mounted() {
+    console.log("sdfsdf");
     var video = document.createElement("video");
     var canvasElement = document.getElementById("canvas");
     var canvas = canvasElement.getContext("2d");

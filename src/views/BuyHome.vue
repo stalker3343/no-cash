@@ -10,7 +10,7 @@
       <ion-grid >
          <ion-row >
           <ion-col>
-             <ion-input  @click="onClickSearch" color="red" size="50" class="search-input" placeholder="Поиск по Еде и Услугам"></ion-input>
+             <ion-input  @click="onClickSearch" color="red" size="40" class="search-input" placeholder="Поиск по Еде и Услугам"></ion-input>
           </ion-col>
          </ion-row>
         <ion-row v-for="idx in 5" :key="idx">
@@ -65,10 +65,11 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 .search-input {
-  font-size: 30px;
+  margin-top: 20px;
+  font-size: 20px;
   --background: #f1f0ec;
   --placeholder-color: #acaba7;
-  border-radius: 40px;
+  border-radius: 30px;
   // padding: 6px 50px;
   --padding-start: 20px;
   --padding-end: 20px;
