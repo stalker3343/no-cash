@@ -1,10 +1,17 @@
 /* Ionic Variables and Theming. For more info, please see:
 http://ionicframework.com/docs/theming/ */
 
+.container {
+  padding: 10px 15px;
+}
 /** Ionic CSS Variables **/
 :root {
+  --border-radius: 50px !important;
+
+  --ion-font-family: "IBM Plex Sans", sans-serif;
+
   /** primary **/
-  --ion-color-primary: #3880FF;
+  --ion-color-primary: #20be4d;
   --ion-color-primary-rgb: 56, 128, 255;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
@@ -76,13 +83,15 @@ http://ionicframework.com/docs/theming/ */
   --ion-color-light-tint: #f5f6f9;
 }
 
+
+
 @media (prefers-color-scheme: dark) {
   /*
    * Dark Colors
    * -------------------------------------------
    */
 
-  body {
+  /* body {
     --ion-color-primary: #afccff;
     --ion-color-primary-rgb: 175, 204, 255;
     --ion-color-primary-contrast: #000000;
@@ -145,14 +154,14 @@ http://ionicframework.com/docs/theming/ */
     --ion-color-light-contrast-rgb: 255,255,255;
     --ion-color-light-shade: #1e2023;
     --ion-color-light-tint: #383a3e;
-  }
+  } */
 
   /*
    * iOS Dark Theme
    * -------------------------------------------
    */
 
-  .ios body {
+  /* .ios body {
     --ion-background-color: #000000;
     --ion-background-color-rgb: 0,0,0;
 
@@ -182,13 +191,13 @@ http://ionicframework.com/docs/theming/ */
     --ion-item-background: #000000;
 
     --ion-card-background: #1c1c1d;
-  }
+  } */
 
-  .ios ion-modal {
+  /* .ios ion-modal {
     --ion-background-color: var(--ion-color-step-100);
     --ion-toolbar-background: var(--ion-color-step-150);
     --ion-toolbar-border-color: var(--ion-color-step-250);
-  }
+  } */
 
 
   /*
@@ -196,7 +205,7 @@ http://ionicframework.com/docs/theming/ */
    * -------------------------------------------
    */
 
-  .md body {
+  /* .md body {
     --ion-background-color: #121212;
     --ion-background-color-rgb: 18,18,18;
 
@@ -232,5 +241,5 @@ http://ionicframework.com/docs/theming/ */
     --ion-tab-bar-background: #1f1f1f;
 
     --ion-card-background: #1e1e1e;
-  }
+  } */
 }

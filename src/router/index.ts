@@ -1,39 +1,59 @@
-import { createRouter, createWebHistory } from '@ionic/vue-router';
-import { RouteRecordRaw } from 'vue-router';
-import TabsPage from '../views/TabsPage.vue'
+import { createRouter, createWebHistory } from "@ionic/vue-router";
+import { card } from "ionicons/icons";
+import { RouteRecordRaw } from "vue-router";
+import TabsPage from "../views/TabsPage.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/',
-    redirect: '/tabs/tab1'
+    path: "/",
+    redirect: "/tabs/buy-home",
   },
+
   {
-    path: '/tabs/',
+    name: "cart",
+    path: "/cart",
+    component: () => import("@/views/CartPage.vue"),
+  },
+
+  {
+    path: "/tabs/",
     component: TabsPage,
     children: [
       {
-        path: '',
-        redirect: '/tabs/tab1'
+        path: "",
+        redirect: "/tabs/buy-home",
       },
       {
-        path: 'tab1',
-        component: () => import('@/views/Tab1Page.vue')
+        path: "/tabs/search",
+        name: "search",
+        component: () => import("@/views/Search.vue"),
       },
+
       {
-        path: 'tab2',
-        component: () => import('@/views/Tab2Page.vue')
+        path: "buy-home",
+        component: () => import("@/views/BuyHome.vue"),
       },
+
       {
-        path: 'tab3',
-        component: () => import('@/views/Tab3Page.vue')
-      }
-    ]
-  }
-]
+        path: "sell-list",
+        component: () => import("@/views/Tab2Page.vue"),
+      },
+
+      // {
+      //   path: "orders",
+      //   component: () => import("@/views/Tab2Page.vue"),
+      // },
+      // {
+      //   path: "orders",
+      //   component: () => import("@/views/Tab3Page.vue"),
+      // },
+    ],
+  },
+];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;
