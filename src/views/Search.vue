@@ -5,7 +5,7 @@
       <ion-buttons slot="start">
         <ion-back-button default-href="/tabs/buy-home"></ion-back-button>
       </ion-buttons>
-     <ion-input  @click="onClickSearch" color="red" size="50" class="search-input" placeholder="Поиск по Еде и Услугам"></ion-input>
+     <ion-input   color="red" size="50" class="search-input" placeholder="Поиск по Еде и Услугам"></ion-input>
 
 
     </ion-toolbar>
@@ -35,19 +35,8 @@
     <ion-card-content>
           <ion-slides :options="slideOpts">
           <ion-slide v-for="idx in 4" :key="idx" >
-            <div class="slide">
-           
-                  <img src="@/images/dish-scetch.webp">
-                  <div class="card-header">
-                    Суши
-                  </div>
-                    <div class="card-price">
-                    500р.
-                  </div>
-                  <IonButton class="card-btn" :block="true" @click="onBuy">
-                      Купить
-                  </IonButton>
-            </div>
+            <ProductComponent :product="{name: 'Суши', price: '500р.'}"></ProductComponent>
+
           </ion-slide>
 
 
@@ -69,12 +58,14 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-
+import ProductComponent from "@/components/ProductComponent.vue";
 import { timeOutline, star } from "ionicons/icons";
 
 export default defineComponent({
   name: "Tab2Page",
-  components: {},
+  components: {
+    ProductComponent,
+  },
   setup() {
     const slideOpts = {
       slidesPerView: 3,
@@ -109,23 +100,5 @@ export default defineComponent({
 
 .ion-slides {
   height: 100%;
-}
-.slide {
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-}
-.card-header {
-  text-align: left;
-}
-.card-price {
-  text-align: left;
-  font-size: 14px;
-}
-.card-btn {
-  width: 100%;
-  margin: 0px;
-  margin-top: 6px;
-  text-transform: capitalize !important;
 }
 </style>

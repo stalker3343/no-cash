@@ -14,6 +14,11 @@ const routes: Array<RouteRecordRaw> = [
     path: "/cart",
     component: () => import("@/views/CartPage.vue"),
   },
+  {
+    name: "login",
+    path: "/login",
+    component: () => import("@/views/LoginPage.vue"),
+  },
 
   {
     path: "/tabs/",
@@ -22,6 +27,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "",
         redirect: "/tabs/buy-home",
+        name: "",
       },
       {
         path: "/tabs/search",
@@ -38,11 +44,10 @@ const routes: Array<RouteRecordRaw> = [
         path: "sell-list",
         component: () => import("@/views/Tab2Page.vue"),
       },
-
-      // {
-      //   path: "orders",
-      //   component: () => import("@/views/Tab2Page.vue"),
-      // },
+      {
+        path: "account",
+        component: () => import("@/views/AccountPage.vue"),
+      },
       // {
       //   path: "orders",
       //   component: () => import("@/views/Tab3Page.vue"),

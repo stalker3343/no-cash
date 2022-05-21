@@ -7,9 +7,22 @@
     </ion-header> -->
     
     <ion-content fullscreen>
-      <div class="container">
-        <ion-input  @click="onClickSearch" color="red" size="50" class="search-input" placeholder="Поиск по Еде и Услугам"></ion-input>
-      </div>
+      <ion-grid >
+         <ion-row >
+          <ion-col>
+             <ion-input  @click="onClickSearch" color="red" size="50" class="search-input" placeholder="Поиск по Еде и Услугам"></ion-input>
+          </ion-col>
+         </ion-row>
+        <ion-row v-for="idx in 5" :key="idx">
+          <ion-col>
+            <ProductComponent :product="{name: 'Суши', price: '500р.'}"></ProductComponent>
+          </ion-col>
+            <ion-col>
+              <ProductComponent :product="{name: 'Суши', price: '500р.'}"></ProductComponent>
+          </ion-col>
+        </ion-row>
+
+      </ion-grid>
 
  
       <!-- <ExploreContainer name="Tab 1 page 23" /> -->
@@ -28,11 +41,11 @@ import {
   IonTitle,
   IonContent,
 } from "@ionic/vue";
-import ExploreContainer from "@/components/ExploreContainer.vue";
-
+import ProductComponent from "@/components/ProductComponent.vue";
 export default defineComponent({
   name: "Tab1Page",
   components: {
+    ProductComponent,
     // ExploreContainer,
     // IonHeader,
     // IonToolbar,

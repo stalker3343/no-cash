@@ -1,6 +1,7 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
+import { createPinia } from "pinia";
 
 import { IonicVue } from "@ionic/vue";
 
@@ -28,7 +29,7 @@ import "./styles/typography.scss";
 import * as IonComponents from "@ionic/vue";
 
 const app = createApp(App).use(IonicVue).use(router);
-
+app.use(createPinia());
 Object.keys(IonComponents).forEach((key) => {
   if (/^Ion[A-Z]\w+$/.test(key)) {
     app.component(key, IonComponents[key]);

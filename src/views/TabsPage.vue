@@ -1,5 +1,43 @@
 <template>
   <ion-page>
+       <ion-fab class="qr-code-fab" horizontal="end" vertical="bottom" slot="fixed">
+      
+         <template v-if="authStore.user">
+            <ion-fab-button @click="createQr" v-if="authStore.user.role === USER_ROLES.BUYER" id="trigger-button-qr">
+              <ion-icon :icon="qrCode"></ion-icon>
+            </ion-fab-button>
+
+            <ion-fab-button v-else-if="authStore.user.role === USER_ROLES.SELLER || authStore.user.role === USER_ROLES.OPERATION_ADMIN" id="trigger-button-qr-scan"  >
+              <ion-icon :icon="qrCode"></ion-icon>
+
+            </ion-fab-button>
+         </template>
+   
+
+
+
+
+          
+        </ion-fab>
+
+    <ion-header>
+      <!-- <ion-toolbar>
+          <ion-grid>
+            <ion-row>
+              <ion-col class="top-row">
+              <ion-button class="btn-qr-code">
+              </ion-button>
+
+        
+
+              </ion-col>
+            </ion-row>
+        </ion-grid>
+
+
+        </ion-toolbar> -->
+
+    </ion-header>
     <ion-tabs>
       <ion-router-outlet></ion-router-outlet>
       <ion-tab-bar slot="bottom">
@@ -19,14 +57,45 @@
         </ion-tab-button> -->
       </ion-tab-bar>
     </ion-tabs>
+    <!-- Sheet Modal -->
+      <ion-modal 
+        trigger="trigger-button-qr"
+        :breakpoints="[0.5]"
+        :initialBreakpoint="0.5"
+      >
+        <div class="qr-wraper">
+   
+          <canvas class="qr-canvas" id="canvas"></canvas>
+
+        </div>
+
+
+      </ion-modal>
+
+       <ion-modal 
+        trigger="trigger-button-qr-scan"
+        :breakpoints="[0.4]"
+        :initialBreakpoint="0.4"
+      >
+   
+        <QrScaner @qr-finded="onQrFinded"></QrScaner>
+ 
+
+
+      </ion-modal>
+      
+      
   </ion-page>
 
       
 </template>
 
 <script lang="ts">
+import { useAuthStore } from "@/stores/auth";
+import { USER_ROLES } from "@/const";
+import { toastController } from "@ionic/vue";
 import { defineComponent, ref } from "vue";
-
+import QrScaner from "@/components/QrScaner.vue";
 import {
   ellipse,
   square,
@@ -36,12 +105,49 @@ import {
   bookSharp,
   cartSharp,
   person,
+  qrCode,
+  qrCodeOutline,
+  qrCodeSharp,
 } from "ionicons/icons";
+
+// index.js -> bundle.js
+import QRCode from "qrcode";
 
 export default defineComponent({
   name: "TabsPage",
+  components: {
+    QrScaner,
+  },
 
   setup() {
+    const authStore = useAuthStore();
+
+    const isModalOpen = ref(false);
+    const createQr = () => {
+      console.log("🚀 ~ file: TabsPage.vue ~ line 140 ~ createQr ~ createQr");
+
+      setTimeout(() => {
+        var canvas = document.getElementById("canvas");
+        QRCode.toCanvas(
+          canvas,
+          authStore.user.id,
+          {
+            width: 350,
+          },
+          function (error) {
+            if (error) console.error(error);
+            console.log("success!");
+          }
+        );
+      }, 1000);
+    };
+    const onQrFinded = async (code) => {
+      const toast = await toastController.create({
+        message: code,
+        duration: 1000,
+      });
+      return toast.present();
+    };
     const menu = ref([
       {
         href: "/tabs/buy-home",
@@ -67,21 +173,50 @@ export default defineComponent({
         icon: cartSharp,
         tab: "cart",
       },
-      // {
-      //   href: "/tabs/orders",
-      //   text: "Личное",
-      // tab: "orders",
-      //   icon: person,
-      // },
+      {
+        href: "/tabs/account",
+        text: "Личное",
+        tab: "account",
+        icon: person,
+      },
     ]);
 
     return {
       menu,
-      // ellipse,
-      // square,
-      // triangle,
-      // menu
+      onQrFinded,
+      qrCode,
+      qrCodeOutline,
+      qrCodeSharp,
+      isModalOpen,
+      createQr,
+      authStore,
+      USER_ROLES,
     };
   },
 });
 </script>
+
+<style lang="scss" scoped>
+.top-row {
+  display: flex;
+  justify-content: center;
+}
+.btn-qr-code {
+  width: 60%;
+}
+:host(.fab-vertical-bottom) {
+  bottom: 70px !important;
+}
+.qr-code-fab {
+  bottom: 70px;
+}
+.qr-canvas {
+  margin: 0 auto !important;
+  // width: 60% !important;
+  // height: auto !important;
+}
+.qr-wraper {
+  display: flex;
+  justify-content: center;
+}
+</style>
