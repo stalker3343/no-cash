@@ -13,6 +13,22 @@
              <ion-input  @click="onClickSearch" color="red" size="40" class="search-input" placeholder="Поиск по Еде и Услугам"></ion-input>
           </ion-col>
          </ion-row> -->
+
+          <ion-row >
+          <ion-col>
+            <div class="add-cont">
+ {{rundAdd.text}}
+            </div>
+
+          
+             
+            <!-- </ion-alert> -->
+          </ion-col>
+            <!-- <ion-col>
+              <ProductComponent :product="product"></ProductComponent>
+          </ion-col> -->
+        </ion-row>
+
         <ion-row >
           <ion-col size="6" v-for="product in products" :key="product.id">
             <ProductComponent :product="product"></ProductComponent>
@@ -59,10 +75,17 @@ export default defineComponent({
   data() {
     return {
       products: [],
+      rundAdd: null,
     };
   },
   async created() {
     const authStore = useAuthStore();
+
+    const addREsp = await axios.get(
+      "https://frozen-gorge-59006.herokuapp.com/rand_advertisement"
+    );
+    this.rundAdd = addREsp.data.data;
+    // this.addList = res.data.data;
 
     const cardREs = await axios.get(
       "https://serene-spire-16208.herokuapp.com/api/cartitems",
@@ -108,5 +131,12 @@ export default defineComponent({
     font-size: 20px;
     text-align: center;
   }
+}
+.add-cont {
+  background: rgb(211, 211, 211);
+  padding: 5px 10px;
+  border-radius: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 </style>
