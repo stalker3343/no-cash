@@ -30,8 +30,32 @@
                                      </template>
 
                                  </h4>
-                                 <div>
-                                     Статус: {{item.status }}                                                        
+                                 <div class="status-wrapper">
+                                   <div class="status-name">
+Статус 
+                                   </div>
+                                     
+                                    <!-- 
+PENDING: string;
+    CANCEL: string;
+    ACCEPTED: string;
+    COMPLETE: string;
+
+                                     -->
+                                     <template v-if="item.status === ORDER_STATUS.PENDING">
+ <ion-badge color="success" >Выполнен</ion-badge>
+
+                                     </template>
+                                      <template v-if="item.status === ORDER_STATUS.CANCEL">
+
+                                     </template>
+                                      <template v-if="item.status === ORDER_STATUS.ACCEPTED">
+ <ion-badge color="secondary" >Принят в доставку</ion-badge>
+                                     </template>
+                                      <template v-if="item.status === ORDER_STATUS.COMPLETE">
+ <ion-badge color="success" >Выполнен</ion-badge>
+                                     </template>
+                                      <!-- {{item.status }}                                                         -->
                                  </div>
                                    <div>
                                      Дата: {{item.date }}                                                         
@@ -235,5 +259,13 @@ export default defineComponent({
 }
 .btns-wrapper {
   display: flex;
+}
+.status-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.status-name {
+  margin-right: 8px;
 }
 </style>

@@ -14,25 +14,26 @@
           </ion-col>
          </ion-row> -->
 
-          <ion-row v-if="rundAdd" >
-          <ion-col>
-            <div class="add-cont">
- {{rundAdd.text}}
-            </div>
 
-          
-             
-            <!-- </ion-alert> -->
-          </ion-col>
-            <!-- <ion-col>
-              <ProductComponent :product="product"></ProductComponent>
-          </ion-col> -->
-        </ion-row>
 
         <ion-row >
           <ion-col size="6" v-for="product in products" :key="product.id">
-            <ProductComponent :product="product"></ProductComponent>
+       
+<ProductComponent :product="product"></ProductComponent>
+         
+            
           </ion-col>
+          <ion-col v-if="rundAdd" size="6" >
+            <ion-card class="ion-cardddd" >
+              <ion-card-content>
+              {{rundAdd.text}}
+              </ion-card-content>
+            </ion-card>
+            
+          </ion-col>
+
+          
+
             <!-- <ion-col>
               <ProductComponent :product="product"></ProductComponent>
           </ion-col> -->
@@ -138,5 +139,11 @@ export default defineComponent({
   border-radius: 10px;
   margin-top: 20px;
   margin-bottom: 20px;
+}
+.ion-cardddd {
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 </style>

@@ -50,7 +50,7 @@
                
                 </div>
                 <div padding>
-                    <ion-button :disabled="loading" size="large" type="submit"  expand="block">Login</ion-button>
+                    <ion-button :disabled="loading" size="large" type="submit"  expand="block">Создать</ion-button>
                 </div>
                 </ion-col>
             </ion-row>
