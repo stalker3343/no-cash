@@ -145,6 +145,59 @@ export default defineComponent({
       if (!authStore.user) {
         return [];
       }
+
+      if (authStore.user.role === USER_ROLES.OPERATION_ADMIN) {
+        return [
+          {
+            href: "/tabs/add-balance",
+            text: "Начислить баланс",
+            tab: "add-balance",
+            icon: person,
+          },
+
+          {
+            href: "/tabs/account",
+            text: "Личное",
+            tab: "account",
+            icon: person,
+          },
+          // {
+          //   href: "/tabs/account",
+          //   text: "Добавить пользователя",
+          //   tab: "account",
+          //   icon: person,
+          // },
+        ];
+      }
+
+      if (authStore.user.role === USER_ROLES.MANAGER) {
+        return [
+          {
+            href: "/tabs/aads",
+            text: "Реклама",
+            tab: "aads",
+            icon: person,
+          },
+          {
+            href: "/tabs/manage-users",
+            text: "Пользователи",
+            tab: "manage-users",
+            icon: person,
+          },
+          {
+            href: "/tabs/account",
+            text: "Личное",
+            tab: "account",
+            icon: person,
+          },
+          // {
+          //   href: "/tabs/account",
+          //   text: "Добавить пользователя",
+          //   tab: "account",
+          //   icon: person,
+          // },
+        ];
+      }
       if (authStore.user.role === USER_ROLES.SELLER) {
         return [
           {
@@ -153,17 +206,30 @@ export default defineComponent({
             text: "Магазин",
             icon: homeSharp,
           },
-          {
-            href: "/tabs/account",
-            text: "Личное",
-            tab: "account",
-            icon: person,
-          },
+
           {
             href: "/cart",
             text: "Заказ",
             icon: cartSharp,
             tab: "cart",
+          },
+          {
+            href: "/tabs/chat",
+            text: "Чат",
+            tab: "chat",
+            icon: person,
+          },
+          {
+            href: "/tabs/orders",
+            text: "Заказы",
+            icon: bookSharp,
+            tab: "orders",
+          },
+          {
+            href: "/tabs/account",
+            text: "Личное",
+            tab: "account",
+            icon: person,
           },
         ];
       }

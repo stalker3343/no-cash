@@ -20,6 +20,7 @@
 <script>
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from "vue-router";
+import { mapStores } from "pinia";
 
 export default {
   setup() {
@@ -34,6 +35,12 @@ export default {
       authStore,
       logOut,
     };
+  },
+  created() {
+    console.log(useAuthStore);
+  },
+  computed: {
+    ...mapStores(useAuthStore),
   },
 };
 </script>

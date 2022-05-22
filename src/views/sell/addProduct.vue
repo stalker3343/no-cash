@@ -33,7 +33,20 @@
                         <ion-select-option v-for="item in categories" :key="item.id" :value="item.id">{{ item.name }} </ion-select-option>
                         <!-- <ion-select-option :value="2">Male</ion-select-option> -->
                     </ion-select>
-                      </ion-item>
+                       </ion-item>
+                    <ion-item  placeholder="Загрузите картинку">
+                        <input
+                            id="image-loader"
+                            ref="input"
+                            type="file"
+                            @change="upload($event.target.files)"
+                        />
+                        <!-- <ion-select-option :value="2">Male</ion-select-option> -->
+                    </ion-item>
+
+
+
+                   
                
                 </div>
                 <div padding>
@@ -55,26 +68,32 @@ import { useIonRouter } from "@ionic/vue";
 import { ref } from "vue";
 
 export default defineComponent({
-  created() {
-    console.log("created");
+  data() {
+    return {
+      categories: [],
+    };
+  },
+  async created() {
+    const resCategs = await axios.get(
+      "https://serene-spire-16208.herokuapp.com/api/category"
+    );
+    this.categories = resCategs.data.list;
   },
   setup() {
     const ionRouter = useIonRouter();
     let loading = ref(false);
-    let categories = ref([
-      {
-        name: "Напитки",
-        id: 9,
-      },
-      {
-        name: "Снеки",
-        id: 10,
-      },
-    ]);
+
     let categ = ref(null);
     let description = ref("");
     let name = ref("");
-    let price = ref(10);
+    let price = ref("");
+    let fileToUpload = ref(null);
+
+    const upload = (inputFiles) => {
+      // const files = []
+
+      fileToUpload.value = inputFiles[0];
+    };
 
     const create = async () => {
       const authStore = useAuthStore();
@@ -92,6 +111,32 @@ export default defineComponent({
           }
         );
 
+        var formData = new FormData();
+        // formData.append("id", res.data.id);
+        formData.append("image", fileToUpload.value);
+
+        const resAfterImage = axios({
+          method: "put",
+          url: `https://frozen-gorge-59006.herokuapp.com/products/${res.data.id}`,
+          data: formData,
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "multipart/form-data",
+          },
+        })
+          .then(function (response) {
+            console.log(response);
+          })
+          .catch(function (response) {
+            console.error(response);
+          });
+
+        // const resAfterImage = await axios.put(
+        //   "https://frozen-gorge-59006.herokuapp.com/products",
+        //   formData
+        // );
+        console.log(resAfterImage);
+
         loading.value = false;
 
         ionRouter.back();
@@ -105,11 +150,12 @@ export default defineComponent({
     return {
       create,
       loading,
-      categories,
+
       categ,
       description,
       name,
       price,
+      upload,
     };
   },
 });

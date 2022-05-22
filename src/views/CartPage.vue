@@ -17,7 +17,7 @@
       <ion-row>
         <ion-col>
           <div class="icis-h4 page-header">
-            {{list.length}} товар на 457 Р.
+            {{list.length}} товар на {{summ}} ₽
           </div>
           <div class="deliverer-name ">
             2 берега
@@ -43,7 +43,7 @@
             <ion-textarea v-if="!isSeller" placeholder="Комментарий к заказу">
             </ion-textarea>
             <ion-button v-if="isSeller"  @click="onActionClick" class="buy-btn-card" block>
-               Подтвердить сделку по QR
+               Списать по QR
 
             </ion-button>
 
@@ -79,14 +79,14 @@
 </template>
 
 <script >
-import { toastController } from "@ionic/vue";
 import ProductComponent from "@/components/ProductComponent.vue";
 import { USER_ROLES } from "@/const";
+import { loadingController, toastController } from "@ionic/vue";
 import { useAuthStore } from "@/stores/auth";
 import QrScaner from "@/components/QrScaner.vue";
 import { computed, defineComponent, ref } from "vue";
 import axios from "axios";
-
+import { ORDER_STATUS } from "@/const";
 export default defineComponent({
   components: {
     QrScaner,
@@ -101,19 +101,9 @@ export default defineComponent({
       return authStore.user.role === USER_ROLES.SELLER;
     });
 
-    const onQrFinded = async (code) => {
-      isQrScanOpen.value = false;
-      const toast = await toastController.create({
-        message: code,
-        duration: 1000,
-      });
-      return toast.present();
-    };
-
     return {
       isSeller,
 
-      onQrFinded,
       isQrScanOpen,
     };
   },
@@ -122,7 +112,17 @@ export default defineComponent({
     return {
       isLoading: false,
       list: [],
+      startProccesAFterQr: false,
     };
+  },
+  computed: {
+    summ() {
+      let res = 0;
+      this.list.forEach((cartItem) => {
+        res += cartItem.count * cartItem.idProduct.price;
+      });
+      return res;
+    },
   },
 
   async created() {
@@ -150,6 +150,47 @@ export default defineComponent({
     }
   },
   methods: {
+    async onQrFinded(code) {
+      if (this.startProccesAFterQr) return;
+      this.startProccesAFterQr = true;
+      this.isQrScanOpen = false;
+      const loading = await loadingController.create();
+      await loading.present();
+
+      try {
+        const authStore = useAuthStore();
+
+        const transaction = await axios.post(
+          "https:/serene-spire-16208.herokuapp.com/api/create/transaction",
+          {
+            idUserTo: code,
+            idUserFrom: authStore.user.id,
+            value: 0,
+          }
+        );
+
+        const order = await axios.post(
+          "https:/serene-spire-16208.herokuapp.com/api/create/order",
+          {
+            idTransaction: transaction.data.id,
+            status: ORDER_STATUS.COMPLETE,
+            comment: "",
+            cancelComment: "",
+            paymentId: "",
+          }
+        );
+      } catch (error) {
+        const toast = await toastController.create({
+          message: "Ошибка",
+          duration: 1000,
+        });
+
+        toast.present();
+      } finally {
+        loading.dismiss();
+        this.startProccesAFterQr = false;
+      }
+    },
     async onActionClick() {
       const authStore = useAuthStore();
       if (this.isSeller) {
@@ -157,21 +198,11 @@ export default defineComponent({
         return;
       }
       const firstProduct = this.list[0].idProduct.id;
-      console.log(
-        "🚀 ~ file: CartPage.vue ~ line 160 ~ onActionClick ~ firstProduct",
-        firstProduct
-      );
-
       const { data } = await axios.get(
         "https:/serene-spire-16208.herokuapp.com/api/userproducts2"
       );
-      console.log(data.list);
       const { idUser } = data.list.find(
         (el) => el.idProduct.id == firstProduct
-      );
-      console.log(
-        "🚀 ~ file: CartPage.vue ~ line 165 ~ onActionClick ~ someItem",
-        idUser
       );
 
       const transaction = await axios.post(
@@ -188,16 +219,11 @@ export default defineComponent({
         "https:/serene-spire-16208.herokuapp.com/api/create/order",
         {
           idTransaction: transaction.data.id,
-          status: "",
+          status: ORDER_STATUS.PENDING,
           comment: "",
           cancelComment: "",
           paymentId: "",
         }
-      );
-
-      console.log(
-        "🚀 ~ file: CartPage.vue ~ line 186 ~ onActionClick ~ transaction",
-        order
       );
     },
   },

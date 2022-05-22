@@ -3,7 +3,7 @@
 <!--suppress ALL -->
 
 
-    <ion-content :fullscreen="true">
+    <ion-content ref="contentComponent" :fullscreen="true">
     <ion-list lines="none">
         <ion-item v-for="message in messeges" :key="message.id">
             <chat-bubble :chatMessage="message"></chat-bubble>
@@ -71,6 +71,11 @@ export default defineComponent({
   beforeUnmount() {
     clearInterval(this.intervalId);
   },
+  mounted() {
+    setTimeout(() => {
+      document.querySelector("ion-content").scrollToBottom();
+    }, 500);
+  },
   methods: {
     async getMessages() {
       const res = await axios.get(
@@ -88,6 +93,9 @@ export default defineComponent({
       });
       this.txtChat = "";
       this.loading = false;
+      setTimeout(() => {
+        document.querySelector("ion-content").scrollToBottom();
+      }, 800);
 
       //   console.log("sendMessage");
     },

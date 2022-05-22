@@ -1,15 +1,15 @@
 <template>
             <div class="product">
            
-                  <img src="@/images/dish-scetch.webp">
+                  <img class="product-image" :src="product.image ||  require('@/images/dish-scetch.webp')">
                   <div class="card-header">
                     {{product.name}}
                   </div>
-                    <div class="card-price">
+                    <div >
                     {{product.description}}
                   </div>
                     <div class="card-price">
-                    {{product.price || '-'}}
+                    {{product.price || '-'}} ₽
                   </div>
                   <IonButton :disabled="isLoading" v-if="!count" class="card-btn" :block="true" @click="onBuy">
                     {{isSeller ? 'Добавить в заказ': 'КУпить'}}  
@@ -195,12 +195,20 @@ export default {
 }
 .card-price {
   text-align: left;
-  font-size: 14px;
+  font-size: 18px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  font-weight: 500;
 }
 .card-btn {
   width: 100%;
   margin: 0px;
   margin-top: 6px;
   text-transform: capitalize !important;
+}
+.product-image {
+  height: 172px;
+  width: 100%;
+  object-fit: cover;
 }
 </style>

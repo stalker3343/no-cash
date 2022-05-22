@@ -6,12 +6,12 @@
             <ion-row color="primary" class="justify-content-center align-items-center">
                 <ion-col class="align-self-center" size-md="6" size-lg="5" size-xs="12">
                 <div class="login-header text-center">
-                    <h3>Login</h3>
+                    <h3>Вход</h3>
                 </div>
                 <div class="padding">
 
                     <ion-select v-model="user" placeholder="Выберете пользователя">
-                        <ion-select-option v-for="item in users" :key="item.id" :value="item.id">{{item.login || 'нет имени'}} ({{item.role}})</ion-select-option>
+                        <ion-select-option v-for="item in users" :key="item.id" :value="item.id">{{item.name || item.login || 'нет имени'}} </ion-select-option>
                         <!-- <ion-select-option :value="2">Male</ion-select-option> -->
                     </ion-select>
 
@@ -23,7 +23,7 @@
                     </ion-item> -->
                 </div>
                 <div padding>
-                    <ion-button size="large" type="submit"  expand="block">Login</ion-button>
+                    <ion-button size="large" type="submit"  expand="block">Войти</ion-button>
                 </div>
                 </ion-col>
             </ion-row>
@@ -57,10 +57,21 @@ export default {
       if (!localUser) return;
       localStorage.setItem("user", JSON.stringify(localUser));
       authStore.user = localUser;
+      if (authStore.user.role === USER_ROLES.OPERATION_ADMIN) {
+        router.push("/tabs/add-balance");
+        return;
+      }
+
       if (authStore.user.role === USER_ROLES.SELLER) {
         router.push("/tabs/sell-home");
         return;
       }
+
+      if (authStore.user.role === USER_ROLES.MANAGER) {
+        router.push("/tabs/aads");
+        return;
+      }
+
       router.push("/");
     };
     return {

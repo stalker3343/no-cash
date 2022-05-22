@@ -16,6 +16,10 @@ const routes: Array<RouteRecordRaw> = [
     path: "/add-product",
     component: () => import("@/views/sell/addProduct.vue"),
   },
+  {
+    path: "/add-user",
+    component: () => import("@/views/sell/addProduct.vue"),
+  },
 
   {
     name: "cart",
@@ -70,6 +74,22 @@ const routes: Array<RouteRecordRaw> = [
         name: "chat",
         path: "chat",
         component: () => import("@/views/ChatRoom.vue"),
+      },
+      {
+        name: "aads",
+        path: "aads",
+        component: () => import("@/views/manager/AadsPage.vue"),
+      },
+      {
+        name: "user-managment",
+        path: "manage-users",
+        component: () => import("@/views/manager/UserManag.vue"),
+      },
+
+      {
+        name: "add-balance",
+        path: "add-balance",
+        component: () => import("@/views/operator/AddBalance.vue"),
       },
     ],
   },
