@@ -2,24 +2,16 @@
   <ion-page>
        <ion-fab class="qr-code-fab" horizontal="end" vertical="bottom" slot="fixed">
       
-         <template v-if="authStore.user">
+         <template v-if="authStore.user && $route.name!=='chat'">
          
             <ion-fab-button v-if="authStore.user.role === USER_ROLES.BUYER"  id="trigger-button-qr" @click="createQr" >
               
               <ion-icon :icon="qrCode"></ion-icon>
             </ion-fab-button>
 
-            <ion-fab-button  @click="scanQr" v-else-if="authStore.user.role === USER_ROLES.SELLER || authStore.user.role === USER_ROLES.OPERATION_ADMIN"  id="trigger-button-qr-scan" >
-              <ion-icon :icon="qrCode"></ion-icon>
 
-            </ion-fab-button>
          </template>
-   
 
-
-
-
-          
         </ion-fab>
 
     <ion-header>
@@ -41,7 +33,7 @@
 
     </ion-header>
     <ion-tabs>
-      <ion-router-outlet></ion-router-outlet>
+      <ion-router-outlet :key="$route.path"></ion-router-outlet>
       <ion-tab-bar slot="bottom">
         <ion-tab-button v-for="tab in menu" :key="tab.href" :tab="tab.tab" :href="tab.href">
           <ion-icon :icon="tab.icon" />
@@ -77,19 +69,7 @@
 
       </ion-modal>
 
-       <ion-modal 
-        @ionModalDidDismiss="isQrScanOpen = false"
-       :isOpen="isQrScanOpen"
-        trigger="trigger-button-qr-scan"
-        :breakpoints="[0.4]"
-        :initialBreakpoint="0.4"
-      >
-   
-        <QrScaner @qr-finded="onQrFinded"></QrScaner>
- 
 
-
-      </ion-modal>
       
       
   </ion-page>
@@ -98,8 +78,6 @@
 </template>
 
 <script lang="ts">
-import { modalController } from "@ionic/vue";
-
 import { useAuthStore } from "@/stores/auth";
 import { USER_ROLES } from "@/const";
 import { toastController } from "@ionic/vue";
@@ -109,8 +87,8 @@ import {
   onBeforeUnmount,
   onDeactivated,
   onMounted,
+  computed,
 } from "vue";
-import QrScaner from "@/components/QrScaner.vue";
 import {
   ellipse,
   square,
@@ -130,18 +108,11 @@ import QRCode from "qrcode";
 
 export default defineComponent({
   name: "TabsPage",
-  components: {
-    QrScaner,
-  },
 
   setup() {
     const authStore = useAuthStore();
     const isQrShopOpen = ref(false);
-    const isQrScanOpen = ref(false);
 
-    const scanQr = () => {
-      isQrScanOpen.value = true;
-    };
     const createQr = async () => {
       isQrShopOpen.value = true;
       // console.log("🚀 ~ file: TabsPage.vue ~ line 140 ~ createQr ~ createQr");
@@ -158,7 +129,7 @@ export default defineComponent({
         var canvas = document.getElementById("canvas");
         QRCode.toCanvas(
           canvas,
-          authStore.user.id,
+          String(authStore.user.id),
           {
             width: 350,
           },
@@ -170,50 +141,74 @@ export default defineComponent({
       }, 1000);
     };
 
-    const onQrFinded = async (code) => {
-      isQrScanOpen.value = false;
-      const toast = await toastController.create({
-        message: code,
-        duration: 1000,
-      });
-      return toast.present();
-    };
-    const menu = ref([
-      {
-        href: "/tabs/buy-home",
-        tab: "buy-home",
-        text: "Главная",
-        icon: homeSharp,
-      },
-      {
-        href: "/tabs/sell-list",
-        tab: "sell-list",
-        text: "Магазины",
-        icon: listSharp,
-      },
-      // {
-      //   href: "/tabs/orders",
-      //   text: "Заказы",
-      //   icon: bookSharp,
-      //  tab: "orders",
-      // },
-      {
-        href: "/cart",
-        text: "Корзина",
-        icon: cartSharp,
-        tab: "cart",
-      },
-      {
-        href: "/tabs/account",
-        text: "Личное",
-        tab: "account",
-        icon: person,
-      },
-    ]);
+    const menu = computed(() => {
+      if (!authStore.user) {
+        return [];
+      }
+      if (authStore.user.role === USER_ROLES.SELLER) {
+        return [
+          {
+            href: "/tabs/sell-home",
+            tab: "buy-home",
+            text: "Магазин",
+            icon: homeSharp,
+          },
+          {
+            href: "/tabs/account",
+            text: "Личное",
+            tab: "account",
+            icon: person,
+          },
+          {
+            href: "/cart",
+            text: "Заказ",
+            icon: cartSharp,
+            tab: "cart",
+          },
+        ];
+      }
+      return [
+        {
+          href: "/tabs/buy-home",
+          tab: "buy-home",
+          text: "Главная",
+          icon: homeSharp,
+        },
+        // {
+        //   href: "/tabs/sell-list",
+        //   tab: "sell-list",
+        //   text: "Магазины",
+        //   icon: listSharp,
+        // },
+        {
+          href: "/tabs/orders",
+          text: "Заказы",
+          icon: bookSharp,
+          tab: "orders",
+        },
+        {
+          href: "/cart",
+          text: "Корзина",
+          icon: cartSharp,
+          tab: "cart",
+        },
+        {
+          href: "/tabs/chat",
+          text: "Чат",
+          tab: "chat",
+          icon: person,
+        },
+        {
+          href: "/tabs/account",
+          text: "Личное",
+          tab: "account",
+          icon: person,
+        },
+      ];
+    });
 
     return {
       menu,
-      onQrFinded,
       qrCode,
       qrCodeOutline,
       qrCodeSharp,
@@ -221,8 +216,6 @@ export default defineComponent({
       authStore,
       USER_ROLES,
       isQrShopOpen,
-      isQrScanOpen,
-      scanQr,
     };
   },
 });
@@ -240,7 +233,7 @@ export default defineComponent({
   bottom: 70px !important;
 }
 .qr-code-fab {
-  bottom: 70px;
+  bottom: 120px;
 }
 .qr-canvas {
   margin: 0 auto !important;

@@ -5,12 +5,9 @@ import { USER_ROLES } from "@/const";
 export const useAuthStore = defineStore('auth', {
   // other options...
   state: () => ({
-    user: {
-      name: 'Иванов иван',
-      role: USER_ROLES.SELLER,
-      id: '1234'
-    },
-    // users: [],
+    user: null,
+    users: [],
+    cart: []
   }),
   // getters: {
   //   usersDict: (state) => {

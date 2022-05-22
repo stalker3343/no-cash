@@ -1,0 +1,9 @@
+<template>
+
+<ion-textarea #ionTxtArea
+              placeholder='{{placeholder}}'
+              [(ngModel)]="content"
+              (ngModelChange)='onChange($event)'>
+</ion-textarea>
+
+</template>

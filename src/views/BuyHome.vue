@@ -7,19 +7,19 @@
     </ion-header> -->
     
     <ion-content fullscreen>
-      <ion-grid >
-         <ion-row >
+      <ion-grid>
+         <!-- <ion-row >
           <ion-col>
              <ion-input  @click="onClickSearch" color="red" size="40" class="search-input" placeholder="Поиск по Еде и Услугам"></ion-input>
           </ion-col>
-         </ion-row>
-        <ion-row v-for="idx in 5" :key="idx">
-          <ion-col>
-            <ProductComponent :product="{name: 'Суши', price: '500р.'}"></ProductComponent>
+         </ion-row> -->
+        <ion-row >
+          <ion-col size="6" v-for="product in products" :key="product.id">
+            <ProductComponent :product="product"></ProductComponent>
           </ion-col>
-            <ion-col>
-              <ProductComponent :product="{name: 'Суши', price: '500р.'}"></ProductComponent>
-          </ion-col>
+            <!-- <ion-col>
+              <ProductComponent :product="product"></ProductComponent>
+          </ion-col> -->
         </ion-row>
 
       </ion-grid>
@@ -33,6 +33,9 @@
 </template>
 
 <script lang="ts">
+import axios from "axios";
+import { useAuthStore } from "@/stores/auth";
+
 import { defineComponent } from "vue";
 import {
   IonPage,
@@ -53,11 +56,32 @@ export default defineComponent({
     IonContent,
     IonPage,
   },
+  data() {
+    return {
+      products: [],
+    };
+  },
+  async created() {
+    const authStore = useAuthStore();
+
+    const cardREs = await axios.get(
+      "https://serene-spire-16208.herokuapp.com/api/cartitems",
+      {
+        params: {
+          userId: authStore.user.id,
+        },
+      }
+    );
+    authStore.cart = cardREs.data.list;
+    const res = await axios.get(
+      "https://serene-spire-16208.herokuapp.com/api/product?idCategory=&nameProduct="
+    );
+
+    this.products = res.data.list;
+  },
+
   methods: {
     onClickSearch() {
-      console.log(
-        "🚀 ~ file: BuyHome.vue ~ line 45 ~ onClickSearch ~ onClickSearch"
-      );
       this.$router.push({ name: "search" });
     },
   },
