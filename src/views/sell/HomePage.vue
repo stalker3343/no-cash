@@ -2,7 +2,7 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>мой магазин</ion-title>
+        <ion-title>Мой магазин</ion-title>
       </ion-toolbar>
     </ion-header>
     
@@ -22,7 +22,22 @@
           <ion-col size="6" v-for="categ in categs" :key="categ" >
             <ion-card :router-link="'/sell-cater-products/'+ categ.id">
                 <ion-card-header>
-                    <ion-card-title>{{categ.name}}</ion-card-title>
+                    <ion-card-title class="categ-header">
+                      <template v-if="categ.name ==='напипки'">
+                          Напитки
+                          
+                          <!-- {{categ.name}} -->
+                      </template>
+                       <template v-else-if="categ.name ==='снеки'">
+                          Снеки
+                          
+                          <!-- {{categ.name}} -->
+                      </template>
+                      <template v-else>
+                          {{categ.name}}
+                      </template>
+
+                      </ion-card-title>
                 </ion-card-header>
             </ion-card>
 
