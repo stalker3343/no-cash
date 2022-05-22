@@ -19,9 +19,9 @@
           <div class="icis-h4 page-header">
             {{list.length}} товар на {{summ}} ₽
           </div>
-          <div class="deliverer-name ">
+          <!-- <div class="deliverer-name ">
             2 берега
-          </div>
+          </div> -->
         </ion-col>
       </ion-row>
 
@@ -236,6 +236,7 @@ export default defineComponent({
           paymentId: "",
         }
       );
+      this.fetchItems();
     },
   },
 });

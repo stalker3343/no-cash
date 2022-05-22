@@ -1,5 +1,5 @@
 <template>
-  привет
+  В разработке
 </template>
 
 <script>

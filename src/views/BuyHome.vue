@@ -14,7 +14,7 @@
           </ion-col>
          </ion-row> -->
 
-          <ion-row >
+          <ion-row v-if="rundAdd" >
           <ion-col>
             <div class="add-cont">
  {{rundAdd.text}}

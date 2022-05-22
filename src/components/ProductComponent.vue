@@ -12,7 +12,7 @@
                     {{product.price || '-'}} ₽
                   </div>
                   <IonButton :disabled="isLoading" v-if="!count" class="card-btn" :block="true" @click="onBuy">
-                    {{isSeller ? 'Добавить в заказ': 'КУпить'}}  
+                    {{isSeller ? 'Добавить в заказ': 'Купить'}}  
                   </IonButton>
 
                   <div class="counter-wrapper" v-else>
