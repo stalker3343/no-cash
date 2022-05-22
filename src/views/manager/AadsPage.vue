@@ -27,7 +27,7 @@
             </ion-row>
                <ion-row>
                 <ion-col>
-                    <h3>Список рекламыC</h3>
+                    <h3>Список рекламы</h3>
                     <!-- {{addList}} -->
                 </ion-col>
             </ion-row>
@@ -71,7 +71,7 @@ export default {
     async onAddAdds() {
       if (!this.aadsText) return;
       const res = await axios.post(
-        "https://frozen-gorge-59006.herokuapp.com/adv",
+        "https://frozen-gorge-59006.herokuapp.com/advertisement",
         {
           text: this.aadsText,
         }

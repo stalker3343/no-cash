@@ -13,7 +13,7 @@
 
 
         <ion-list>
-          <h3 class="balance"> Баланс:   {{authStore.user.balance}}</h3>
+          <h3 class="balance"> Баланс:   {{ authStore.user && authStore.user.balance}}</h3>
          
         </ion-list>
         <ion-list>

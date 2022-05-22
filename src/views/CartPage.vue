@@ -124,32 +124,35 @@ export default defineComponent({
       return res;
     },
   },
-
-  async created() {
-    this.isLoading = true;
-    const authStore = useAuthStore();
-    try {
-      const res = await axios.get(
-        "https://serene-spire-16208.herokuapp.com/api/cartitems",
-        {
-          params: {
-            userId: authStore.user.id,
-          },
-        }
-      );
-      authStore.cart = res.data.list;
-      this.list = res.data.list;
-    } catch (error) {
-      const toast = await toastController.create({
-        message: "ОШИБКА",
-        duration: 1000,
-      });
-      return toast.present();
-    } finally {
-      this.isLoading = false;
-    }
+  created() {
+    this.fetchItems();
   },
+
   methods: {
+    async fetchItems() {
+      this.isLoading = true;
+      const authStore = useAuthStore();
+      try {
+        const res = await axios.get(
+          "https://serene-spire-16208.herokuapp.com/api/cartitems",
+          {
+            params: {
+              userId: authStore.user.id,
+            },
+          }
+        );
+        authStore.cart = res.data.list;
+        this.list = res.data.list;
+      } catch (error) {
+        const toast = await toastController.create({
+          message: "ОШИБКА",
+          duration: 1000,
+        });
+        return toast.present();
+      } finally {
+        this.isLoading = false;
+      }
+    },
     async onQrFinded(code) {
       if (this.startProccesAFterQr) return;
       this.startProccesAFterQr = true;
@@ -179,6 +182,7 @@ export default defineComponent({
             paymentId: "",
           }
         );
+        this.fetchItems();
       } catch (error) {
         const toast = await toastController.create({
           message: "Ошибка",
@@ -214,6 +218,13 @@ export default defineComponent({
           value: 0,
         }
       );
+      console.log({
+        idTransaction: transaction.data.id,
+        status: ORDER_STATUS.PENDING,
+        comment: "",
+        cancelComment: "",
+        paymentId: "",
+      });
 
       const order = await axios.post(
         "https:/serene-spire-16208.herokuapp.com/api/create/order",
